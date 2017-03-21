@@ -1,0 +1,27 @@
+# NOTE: each hostname needs to be unique
+#       but they are simply arbitrary names for each cluster
+[east]
+east ansible_connection=local gather_facts=no
+
+[west]
+west ansible_connection=local gather_facts=no
+
+[east:vars]
+clusterhost=https://east.example.com:8443
+token=FIXME_TOKEN_FROM_OC_WHOAMI_-t
+oc=oc --insecure-skip-tls-verify=true --token={{ token }} --server={{ clusterhost }}
+
+[west:vars]
+clusterhost=https://west.example.com:8443
+token=FIXME_TOKEN_FROM_OC_WHOAMI_-t
+oc=oc --insecure-skip-tls-verify=true --token={{ token }} --server={{ clusterhost }}
+
+# EDIT this list of hosts to match above
+[master:children]
+# only one master is allowed
+east
+
+[slaves:children]
+west
+#south
+#north

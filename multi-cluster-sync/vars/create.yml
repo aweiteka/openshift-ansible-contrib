@@ -1,0 +1,16 @@
+---
+# ensure these projects exist in all clusters
+projects:
+  - name: my-project
+    display: My new Project
+    description: this is my new project
+# ensure these users exist in all clusters
+users:
+  - name: rweasley
+    fullname: Ron Weasley
+# NOT IMPLEMENTED: add permissions / roles / users
+permissions:
+  - name: GROUP_or_USER
+    role: registry-admin
+    project: PROJECT
+    users: [scott, tommy, aaron]

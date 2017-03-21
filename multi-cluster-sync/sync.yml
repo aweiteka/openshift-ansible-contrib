@@ -1,0 +1,30 @@
+---
+- name: Check setup
+  hosts: all
+  tags: setup
+  roles:
+    - setup
+
+- name: Ensure these objects exist on all clusters
+  hosts: all
+  tags: create
+  vars_files:
+    - vars/create.yml
+  roles:
+    - role: create
+
+- name: Export objects from master
+  hosts: master
+  tags: sync
+  vars_files:
+    - vars/sync.yml
+  roles:
+    - role: export
+
+- name: Apply exported objects from master to slaves
+  hosts: slaves
+  tags: sync
+  vars_files:
+    - vars/sync.yml
+  roles:
+    - apply

@@ -1,0 +1,13 @@
+---
+- name: which oc
+  command: "which oc"
+  register: which_oc
+  ignore_errors: True
+- name: Verify OpenShift client is installed
+  fail: msg="OpenShift command line client 'oc' could not be found in the path on this system."
+  when: "{{ which_oc.rc }} != 0"
+- name: Verify only one master host
+  fail: msg="Only one host can be listed under the 'master' hostgroup. Check the '[master:children]' section in the inventory file."
+  when: "{{ groups['master'] | length }} != 1"
+- name: Check status
+  command: "{{ oc }} status --all-namespaces=true"

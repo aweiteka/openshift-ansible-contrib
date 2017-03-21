@@ -1,0 +1,14 @@
+---
+# ensure these imagestreams are patch applied to all slave clusters
+imagestreams:
+  - name: rhel7
+    project: my-project
+    tag:
+      from: ""
+      to: "latest"
+# NOT IMPLEMENTED
+dockerpullsecret:
+  - name: dev-pull-secret
+    serviceaccount: dev
+    project: my-project
+    registryhost: example.com
