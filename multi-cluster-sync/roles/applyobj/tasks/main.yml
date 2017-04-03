@@ -1,0 +1,4 @@
+---
+- name: Apply single object
+  shell: "echo '{{ hostvars[groups['master'][0]]['object_export'] | to_json }}' | {{ oc }} apply -f - -n {{ project }}"
+  register: object_apply

@@ -1,0 +1,8 @@
+---
+- name: Export object
+  command: "{{ oc }} export imagestreams {{ object }} -n {{ project }} -o json"
+  register: export_json
+- set_fact:
+#    imagestreams_export: "{{ imagestreams_json.results | list }}"
+    object_export: "{{ export_json.stdout }}"
+#- debug: msg="{{ imagestreams_export | type_debug }}"

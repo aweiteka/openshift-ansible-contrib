@@ -5,3 +5,15 @@
   register: imagestreams_json
 - set_fact:
     imagestreams_export: "{{ imagestreams_json.results | list }}"
+- name: Register serviceaccount token
+  command: "{{ oc }} get sa {{ dockerpullsecret.serviceaccount }} -o json -n {{ dockerpullsecret.project }}"
+  register: secret
+- set_fact:
+    secrets: "{{ secret.stdout | from_json }}"
+- name: get secret blob
+  command: "{{ oc }} get secret {{ secrets.imagePullSecrets[0].name }} -o json"
+  register: secret_export
+- set_fact:
+    secret_json: "{{ secret_export.stdout | from_json }}"
+- set_fact:
+    dockercfg_credentials: "{{ secret_json['data']['.dockercfg'] | b64decode | from_json }}"

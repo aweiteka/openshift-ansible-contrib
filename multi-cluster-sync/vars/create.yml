@@ -1,16 +1,21 @@
 ---
-# ensure these projects exist in all clusters
+# ensure these projects are present on all clusters
 projects:
-  - name: my-project
+  - name: aweiteka
     display: My new Project
     description: this is my new project
-# ensure these users exist in all clusters
+# ensure these users are present on all clusters
 users:
-  - name: rweasley
-    fullname: Ron Weasley
-# NOT IMPLEMENTED: add permissions / roles / users
+  - name: jdoe
+    fullname: John Doe
+# ensure these users have these roles on all clusters
 permissions:
-  - name: GROUP_or_USER
-    role: registry-admin
-    project: PROJECT
-    users: [scott, tommy, aaron]
+  - role: registry-viewer
+    project: aweiteka
+    users:
+      - scollier
+      - aweiteka
+# ensure these serviceaccounts are present on all clusters
+serviceaccounts:
+  - name: aaron
+    project: aweiteka

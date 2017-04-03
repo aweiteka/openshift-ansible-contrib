@@ -1,9 +1,13 @@
 ---
-- name: Apply objects
+- name: Apply exported objects
   shell: "echo '{{ item.stdout }}' | {{ oc }} apply -f - -n {{ item.item.project }}"
   with_items: "{{ hostvars[groups['master'][0]]['imagestreams_export'] }}"
-  register: imagestream_apply
-- name: tag imagestreams
-  command: "{{ oc }} tag {{ item.name }} {{ item.name }}:{{ item.tag.to }}"
-  with_items: "{{ imagestreams }}"
-#  when: item.tag
+- name: Create dockercfg secret
+  command: |-
+    {{ oc }} create secret docker-registry
+    {{ dockerpullsecret.serviceaccount }}-dockercfg
+    --docker-server={{ dockerpullsecret.registryhost }}
+    --docker-username={{ hostvars[groups['master'][0]]['dockercfg_credentials'][dockerpullsecret.registryhost]['username'] }}
+    --docker-email={{ hostvars[groups['master'][0]]['dockercfg_credentials'][dockerpullsecret.registryhost]['email'] }}
+    --docker-password={{ hostvars[groups['master'][0]]['dockercfg_credentials'][dockerpullsecret.registryhost]['password'] }}
+  ignore_errors: True

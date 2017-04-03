@@ -1,14 +1,13 @@
 ---
 # ensure these imagestreams are patch applied to all slave clusters
+# FIXME
 imagestreams:
-  - name: rhel7
-    project: my-project
-    tag:
-      from: ""
-      to: "latest"
-# NOT IMPLEMENTED
+  - name: test
+    project: aweiteka
+# ensure these serviceaccounts on registry cluster
+# have a docker-registry secret on other clusters
+# FIXME: this should be a list
 dockerpullsecret:
-  - name: dev-pull-secret
-    serviceaccount: dev
-    project: my-project
-    registryhost: example.com
+  serviceaccount: aaron
+  project: aweiteka
+  registryhost: docker-registry.default.svc:5000

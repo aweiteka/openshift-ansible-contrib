@@ -6,13 +6,22 @@
   command: "{{ oc }} new-project {{ item.name }} --display-name='{{ item.display }}' --description='{{ item.description }}' --skip-config-write=true"
   with_items: "{{ projects }}"
   when: item.name not in existing_projects.stdout_lines
-
 - name: List users
   command: "{{ oc }} get users"
   register: existing_users
 - name: Create user
   command: "{{ oc }} create user {{ item.name }} --full-name='{{ item.fullname }}'"
   with_items: "{{ users }}"
+  # FIXME
   ignore_errors: True
-# condition not working so we just ignore existing users for now
-#  when: "{{ existing_users.stdout_lines }} | search('{{ item.name }}')"
+- name: Add permissions to users
+  command: "{{ oc }} policy add-role-to-user {{ item.0.role }} {{ item.1 }} -n {{ item.0.project }}"
+  with_subelements:
+    - "{{ permissions }}"
+    - users
+- name: Create serviceaccount
+  command: "{{ oc }} create serviceaccount {{ item.name }} -n {{ item.project }}"
+  with_items:
+    - "{{ serviceaccounts }}"
+  # FIXME
+  ignore_errors: True

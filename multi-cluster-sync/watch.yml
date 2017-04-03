@@ -1,0 +1,16 @@
+---
+- name: Export watched object
+  hosts: master
+  tags: watch
+  vars_files:
+    - vars/sync.yml
+  roles:
+    - watch
+
+- name: Apply watched changes to slave clusters
+  hosts: slaves
+  tags: watch
+  vars_files:
+    - vars/sync.yml
+  roles:
+    - applyobj
